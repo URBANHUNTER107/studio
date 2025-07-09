@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
   title: 'BetterCallCamp',
-  description: 'Your AI-powered advocate for resolving common grievances.',
+  description: 'When systems fail you, Camp stands by you.',
 };
 
 export default function RootLayout({

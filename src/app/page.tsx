@@ -39,7 +39,7 @@ export default function Home() {
           BetterCallCamp
         </h1>
         <p className="mt-3 max-w-2xl mx-auto text-lg text-muted-foreground">
-          Your AI-powered advocate for resolving common grievances.
+          When systems fail you, Camp stands by you.
         </p>
       </header>
 
