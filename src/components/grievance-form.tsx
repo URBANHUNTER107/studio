@@ -39,10 +39,11 @@ export function GrievanceForm({ onSubmit, isLoading }: GrievanceFormProps) {
       <CardHeader>
         <CardTitle className="flex items-center gap-2 font-headline">
           <FileText className="text-primary" />
-          Describe Your Grievance
+          Describe Your Problem
         </CardTitle>
         <CardDescription>
-          Tell us what happened in plain English. Our AI will analyze it and provide you with guidance.
+          Hey there, I'm Camp, an AI-Advocate to guide and help you with 
+          my knowledge Because everyone deserves a fair hearing.  
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -53,7 +54,7 @@ export function GrievanceForm({ onSubmit, isLoading }: GrievanceFormProps) {
               name="grievance"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Your Grievance</FormLabel>
+                  <FormLabel>Describe Your Situation</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="For example: 'My landlord is refusing to return my security deposit even though I left the apartment in perfect condition...' "
@@ -70,10 +71,10 @@ export function GrievanceForm({ onSubmit, isLoading }: GrievanceFormProps) {
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Analyzing...
+                  Thinking about Your situation...
                 </>
               ) : (
-                'Get Help'
+                'Ask From Camp'
               )}
             </Button>
           </form>

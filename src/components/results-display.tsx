@@ -45,7 +45,7 @@ export function ResultsDisplay({ results }: ResultsDisplayProps) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 font-headline">
             <ListChecks className="text-primary" />
-            Suggested Actions
+            What you should Do:-
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -66,7 +66,7 @@ export function ResultsDisplay({ results }: ResultsDisplayProps) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 font-headline">
             <Mail className="text-primary" />
-            Generated Complaint Letter
+            Your Complaint Letter
           </CardTitle>
         </CardHeader>
         <CardContent>
