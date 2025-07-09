@@ -1,1 +1,7 @@
-// Flows will be imported for their side effects in this file.
+import { config } from 'dotenv';
+config();
+
+import '@/ai/flows/suggest-actions.ts';
+import '@/ai/flows/classify-grievance.ts';
+import '@/ai/flows/generate-complaint-letter.ts';
+import '@/ai/flows/explain-rights.ts';
