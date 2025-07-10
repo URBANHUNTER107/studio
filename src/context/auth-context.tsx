@@ -15,13 +15,13 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// getAuth is now called inside the component, which is client-side only.
-// This avoids calling it on the server where it would fail.
-const auth = getAuth(app);
-
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  
+  // getAuth is now called inside the component, which is client-side only.
+  // This avoids calling it on the server where it would fail.
+  const auth = getAuth(app);
 
   const signInWithGoogle = async () => {
     try {
@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setLoading(false);
     });
     return () => unsubscribe();
-  }, []);
+  }, [auth]);
 
   const value = {
     user,
