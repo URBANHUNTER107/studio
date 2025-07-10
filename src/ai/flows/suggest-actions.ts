@@ -12,6 +12,7 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const SuggestActionsInputSchema = z.object({
+  userName: z.string().optional().describe("The user's name."),
   grievance: z.string().describe('The user-submitted grievance in plain text.'),
   classification: z.string().describe('The classification of the grievance (e.g., Rent Dispute, Internship Issue, College Harassment).'),
 });
@@ -31,7 +32,9 @@ const prompt = ai.definePrompt({
   input: {schema: SuggestActionsInputSchema},
   output: {schema: SuggestActionsOutputSchema},
   prompt: `You are an AI assistant helping users resolve their grievances. Given the user's grievance and its classification, suggest 2-3 actionable steps the user can take to resolve their grievance.
-
+{{#if userName}}
+Keep in mind you are addressing {{{userName}}}.
+{{/if}}
 Grievance: {{{grievance}}}
 Classification: {{{classification}}}
 

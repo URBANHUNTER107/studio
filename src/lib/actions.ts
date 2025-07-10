@@ -30,6 +30,7 @@ export async function handleGrievance(grievance: string, name: string): Promise<
 
     // 2. Explain Rights
     const rightsResult = await explainRights({
+      userName: name,
       grievanceCategory: classification[0], // Using the first category for simplicity
       grievanceDescription: grievance,
     });
@@ -37,6 +38,7 @@ export async function handleGrievance(grievance: string, name: string): Promise<
 
     // 3. Suggest Actions
     const actionsResult = await suggestActions({
+      userName: name,
       grievance: grievance,
       classification: classification.join(', '),
     });
@@ -44,6 +46,7 @@ export async function handleGrievance(grievance: string, name: string): Promise<
 
     // 4. Generate Complaint Letter
     const letterResult = await generateComplaintLetter({
+      userName: name,
       grievance: grievance,
       rightsExplanation: rights,
       suggestedActions: actions.join('\n- '),

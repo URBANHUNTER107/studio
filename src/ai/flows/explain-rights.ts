@@ -12,6 +12,7 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const ExplainRightsInputSchema = z.object({
+  userName: z.string().optional().describe("The user's name."),
   grievanceCategory: z
     .string()
     .describe('The category of the grievance (e.g., Rent Dispute, Internship Issue, College Harassment).'),
@@ -35,7 +36,9 @@ const prompt = ai.definePrompt({
   input: {schema: ExplainRightsInputSchema},
   output: {schema: ExplainRightsOutputSchema},
   prompt: `You are an AI assistant that explains user rights related to a grievance in simple terms.
-
+{{#if userName}}
+Address the user by their name, {{{userName}}}.
+{{/if}}
 Grievance Category: {{{grievanceCategory}}}
 Grievance Description: {{{grievanceDescription}}}
 

@@ -13,6 +13,7 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const GenerateComplaintLetterInputSchema = z.object({
+  userName: z.string().optional().describe("The user's name."),
   grievance: z.string().describe('The user-submitted grievance.'),
   rightsExplanation: z.string().describe('Explanation of the user\'s rights.'),
   suggestedActions: z.string().describe('Suggested actions for the user to take.'),
@@ -33,6 +34,8 @@ const prompt = ai.definePrompt({
   input: {schema: GenerateComplaintLetterInputSchema},
   output: {schema: GenerateComplaintLetterOutputSchema},
   prompt: `You are a legal assistant whose job is to generate a draft complaint letter based on the user's grievance, rights, and suggested actions.
+
+The letter should be from the user, so use their name, {{{userName}}}, to sign off at the end of the letter.
 
 Grievance: {{{grievance}}}
 
