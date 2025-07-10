@@ -1,9 +1,7 @@
 'use server';
 
-import { getFirestore, collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { app } from "./firebase";
-
-const db = getFirestore(app);
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "./firebase"; // Import db from the new firebase setup
 
 export async function saveName(name: string) {
   try {
@@ -15,6 +13,10 @@ export async function saveName(name: string) {
     return { success: true, id: docRef.id };
   } catch (e) {
     console.error("Error adding document: ", e);
-    return { success: false, error: e };
+    // Ensure we throw to be caught by the UI
+    if (e instanceof Error) {
+      throw new Error(e.message);
+    }
+    throw new Error("An unknown error occurred while saving the name.");
   }
 }
