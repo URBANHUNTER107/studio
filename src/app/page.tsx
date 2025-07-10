@@ -66,6 +66,7 @@ export default function GrievancePage() {
       <footer className="text-center mt-20 text-sm text-muted-foreground">
         <p>
           Disclaimer: BetterCallCamp provides AI-generated information and is not a substitute for professional legal advice.
+          But you can still trust Camp, your personal AI-Advocate. 
         </p>
       </footer>
     </main>
