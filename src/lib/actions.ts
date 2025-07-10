@@ -27,11 +27,12 @@ export async function handleGrievance(grievance: string, name: string): Promise<
       return { data: null, error: 'Could not classify the grievance. Please try rephrasing.' };
     }
     const classification = classificationResult.categories;
+    const primaryCategory = classification[0];
 
     // 2. Explain Rights
     const rightsResult = await explainRights({
       userName: name,
-      grievanceCategory: classification[0], // Using the first category for simplicity
+      grievanceCategory: primaryCategory,
       grievanceDescription: grievance,
     });
     const rights = rightsResult.rightsExplanation;
@@ -60,26 +61,10 @@ export async function handleGrievance(grievance: string, name: string): Promise<
       letter,
     };
 
-    // Save to Firestore (optional, can be re-enabled)
-    /*
-    try {
-      const { firestore } = await import('./firebase');
-      const { collection, addDoc, serverTimestamp } = await import('firebase/firestore');
-      await addDoc(collection(firestore, 'grievances'), {
-        name,
-        grievance,
-        ...results,
-        createdAt: serverTimestamp(),
-      });
-    } catch (error) {
-      console.error("Error saving to Firestore: ", error);
-      // We don't want to block the user if Firestore fails
-    }
-    */
-
     return { data: results, error: null };
   } catch (e) {
     console.error(e);
-    return { data: null, error: 'An unexpected error occurred. Please try again later.' };
+    const errorMessage = e instanceof Error ? e.message : 'An unexpected error occurred.';
+    return { data: null, error: `An error occurred while processing your request: ${errorMessage}. Please try again later.` };
   }
 }
