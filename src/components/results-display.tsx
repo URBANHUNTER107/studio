@@ -2,7 +2,7 @@ import type { GrievanceResults } from '@/lib/actions';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { BookUser, ListChecks, Mail, Tags } from 'lucide-react';
+import { BookUser, ListChecks, Mail, Tags, ClipboardCheck, CheckSquare } from 'lucide-react';
 
 interface ResultsDisplayProps {
   results: GrievanceResults;
@@ -40,6 +40,25 @@ export function ResultsDisplay({ results }: ResultsDisplayProps) {
           </CardContent>
         </Card>
       </div>
+      
+      <Card className="shadow-lg">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 font-headline">
+            <ClipboardCheck className="text-primary" />
+            Evidence Checklist
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ul className="space-y-3">
+            {results.evidenceChecklist.map((item, index) => (
+              <li key={index} className="flex items-start gap-3">
+                <CheckSquare className="mt-1 flex-shrink-0 h-5 w-5 text-primary" />
+                <span className="text-sm text-muted-foreground">{item}</span>
+              </li>
+            ))}
+          </ul>
+        </CardContent>
+      </Card>
 
       <Card className="shadow-lg">
         <CardHeader>

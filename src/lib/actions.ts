@@ -4,12 +4,14 @@ import { classifyGrievance } from '@/ai/flows/classify-grievance';
 import { explainRights } from '@/ai/flows/explain-rights';
 import { suggestActions } from '@/ai/flows/suggest-actions';
 import { generateComplaintLetter } from '@/ai/flows/generate-complaint-letter';
+import { generateEvidenceChecklist } from '@/ai/flows/generate-evidence-checklist';
 
 export interface GrievanceResults {
   classification: string[];
   rights: string;
   actions: string[];
   letter: string;
+  evidenceChecklist: string[];
 }
 
 export async function handleGrievance(grievance: string, name: string): Promise<{ data: GrievanceResults | null; error: string | null }> {
@@ -29,23 +31,29 @@ export async function handleGrievance(grievance: string, name: string): Promise<
     const classification = classificationResult.categories;
     const primaryCategory = classification[0];
 
-    // 2. Explain Rights
-    const rightsResult = await explainRights({
-      userName: name,
-      grievanceCategory: primaryCategory,
-      grievanceDescription: grievance,
-    });
+    // 2. Explain Rights and Suggest Actions in Parallel
+    const [rightsResult, actionsResult, evidenceResult] = await Promise.all([
+      explainRights({
+        userName: name,
+        grievanceCategory: primaryCategory,
+        grievanceDescription: grievance,
+      }),
+      suggestActions({
+        userName: name,
+        grievance: grievance,
+        classification: primaryCategory,
+      }),
+      generateEvidenceChecklist({
+        grievance: grievance,
+        classification: primaryCategory,
+      }),
+    ]);
+    
     const rights = rightsResult.rightsExplanation;
-
-    // 3. Suggest Actions
-    const actionsResult = await suggestActions({
-      userName: name,
-      grievance: grievance,
-      classification: classification.join(', '),
-    });
     const actions = actionsResult.actions;
+    const evidenceChecklist = evidenceResult.evidence;
 
-    // 4. Generate Complaint Letter
+    // 4. Generate Complaint Letter (depends on previous results)
     const letterResult = await generateComplaintLetter({
       userName: name,
       grievance: grievance,
@@ -59,6 +67,7 @@ export async function handleGrievance(grievance: string, name: string): Promise<
       rights,
       actions,
       letter,
+      evidenceChecklist,
     };
 
     return { data: results, error: null };
