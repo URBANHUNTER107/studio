@@ -2,47 +2,16 @@
 
 import { useState } from 'react';
 import type { GrievanceResults } from '@/lib/actions';
-import { handleGrievance, saveName } from '@/lib/actions';
+import { handleGrievance } from '@/lib/actions';
 import { GrievanceForm } from '@/components/grievance-form';
 import { ResultsDisplay } from '@/components/results-display';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { User } from 'lucide-react';
 
 export default function GrievancePage() {
-  const [name, setName] = useState('');
-  const [nameSubmitted, setNameSubmitted] = useState(false);
   const [results, setResults] = useState<GrievanceResults | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-
-  const handleNameSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (name.trim() === '') {
-      toast({
-        title: 'Error',
-        description: 'Please enter your name.',
-        variant: 'destructive',
-      });
-      return;
-    }
-    setIsLoading(true);
-    try {
-      await saveName(name);
-      setNameSubmitted(true);
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Could not save your name. Please try again.',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleFormSubmit = async ({ grievance }: { grievance: string }) => {
     setIsLoading(true);
@@ -75,59 +44,22 @@ export default function GrievancePage() {
       </header>
 
       <div className="space-y-12">
-        {!nameSubmitted ? (
-          <Card className="w-full max-w-md mx-auto shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 font-headline">
-                <User className="text-primary" />
-                What is your Name?
-              </CardTitle>
-              <CardDescription>
-                Please enter your name to get started.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleNameSubmit} className="space-y-4">
-                <Input
-                  placeholder="Enter your name..."
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  disabled={isLoading}
-                  autoFocus
-                />
-                <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" disabled={isLoading}>
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Saving...
-                    </>
-                  ) : (
-                    'Continue'
-                  )}
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
-        ) : (
-          <>
-            <GrievanceForm onSubmit={handleFormSubmit} isLoading={isLoading} />
-            
-            {isLoading && !results && (
-              <div className="flex flex-col items-center justify-center text-center gap-4 py-10">
-                <Loader2 className="h-12 w-12 animate-spin text-primary" />
-                <p className="text-muted-foreground font-semibold">
-                  Our AI is on the case...<br />
-                  Analyzing your situation, please wait a moment.
-                </p>
-              </div>
-            )}
+        <GrievanceForm onSubmit={handleFormSubmit} isLoading={isLoading} />
+        
+        {isLoading && !results && (
+          <div className="flex flex-col items-center justify-center text-center gap-4 py-10">
+            <Loader2 className="h-12 w-12 animate-spin text-primary" />
+            <p className="text-muted-foreground font-semibold">
+              Our AI is on the case...<br />
+              Analyzing your situation, please wait a moment.
+            </p>
+          </div>
+        )}
 
-            {results && (
-              <div className="animate-in fade-in-50 duration-500">
-                  <ResultsDisplay results={results} />
-              </div>
-            )}
-          </>
+        {results && (
+          <div className="animate-in fade-in-50 duration-500">
+              <ResultsDisplay results={results} />
+          </div>
         )}
       </div>
 

@@ -4,29 +4,12 @@ import { classifyGrievance } from '@/ai/flows/classify-grievance';
 import { explainRights } from '@/ai/flows/explain-rights';
 import { suggestActions } from '@/ai/flows/suggest-actions';
 import { generateComplaintLetter } from '@/ai/flows/generate-complaint-letter';
-import { firestore } from './firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 export interface GrievanceResults {
   classification: string[];
   rights: string;
   actions: string[];
   letter: string;
-}
-
-export async function saveName(name: string) {
-  if (!name.trim()) {
-    throw new Error('Name cannot be empty.');
-  }
-  try {
-    await addDoc(collection(firestore, 'users'), {
-      name: name,
-      createdAt: serverTimestamp(),
-    });
-  } catch (error) {
-    console.error('Error adding document: ', error);
-    throw new Error('Could not save name to Firestore.');
-  }
 }
 
 export async function handleGrievance(grievance: string): Promise<{ data: GrievanceResults | null; error: string | null }> {
@@ -70,6 +53,22 @@ export async function handleGrievance(grievance: string): Promise<{ data: Grieva
       actions,
       letter,
     };
+
+    // Save to Firestore (optional, can be re-enabled)
+    /*
+    try {
+      const { firestore } = await import('./firebase');
+      const { collection, addDoc, serverTimestamp } = await import('firebase/firestore');
+      await addDoc(collection(firestore, 'grievances'), {
+        grievance,
+        ...results,
+        createdAt: serverTimestamp(),
+      });
+    } catch (error) {
+      console.error("Error saving to Firestore: ", error);
+      // We don't want to block the user if Firestore fails
+    }
+    */
 
     return { data: results, error: null };
   } catch (e) {
