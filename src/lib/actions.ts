@@ -12,10 +12,13 @@ export interface GrievanceResults {
   letter: string;
 }
 
-export async function handleGrievance(grievance: string): Promise<{ data: GrievanceResults | null; error: string | null }> {
+export async function handleGrievance(grievance: string, name: string): Promise<{ data: GrievanceResults | null; error: string | null }> {
   try {
     if (!grievance) {
       return { data: null, error: 'Grievance text cannot be empty.' };
+    }
+    if (!name) {
+      return { data: null, error: 'Name cannot be empty.' };
     }
 
     // 1. Classify Grievance
@@ -60,6 +63,7 @@ export async function handleGrievance(grievance: string): Promise<{ data: Grieva
       const { firestore } = await import('./firebase');
       const { collection, addDoc, serverTimestamp } = await import('firebase/firestore');
       await addDoc(collection(firestore, 'grievances'), {
+        name,
         grievance,
         ...results,
         createdAt: serverTimestamp(),

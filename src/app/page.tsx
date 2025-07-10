@@ -13,11 +13,11 @@ export default function GrievancePage() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  const handleFormSubmit = async ({ grievance }: { grievance: string }) => {
+  const handleFormSubmit = async ({ grievance, name }: { grievance: string, name: string }) => {
     setIsLoading(true);
     setResults(null);
 
-    const response = await handleGrievance(grievance);
+    const response = await handleGrievance(grievance, name);
 
     if (response.error) {
       toast({

@@ -4,12 +4,16 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { FileText, Loader2 } from 'lucide-react';
+import { FileText, Loader2, User } from 'lucide-react';
 
 const formSchema = z.object({
+  name: z.string().min(2, {
+    message: 'Please enter a name with at least 2 characters.',
+  }),
   grievance: z.string().min(50, {
     message: 'Please describe your grievance in at least 50 characters.',
   }),
@@ -26,6 +30,7 @@ export function GrievanceForm({ onSubmit, isLoading }: GrievanceFormProps) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: '',
       grievance: '',
     },
   });
@@ -62,6 +67,19 @@ export function GrievanceForm({ onSubmit, isLoading }: GrievanceFormProps) {
                       className="resize-none"
                       {...field}
                     />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Your Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter your name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
